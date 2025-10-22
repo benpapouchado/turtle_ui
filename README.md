@@ -7,3 +7,5 @@ Work in progress:
 Intended to be an application for tracking workouts and general fitness. 
 
 Technologies used: React-native expo, Typescript
+
+Check Turtle repo for backend implementation
