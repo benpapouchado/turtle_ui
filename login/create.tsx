@@ -1,20 +1,26 @@
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Stack } from 'expo-router';
 import React, { useState } from 'react';
-import { Button, Platform, StyleSheet, Text, TextInput, View } from 'react-native';
+// import { eye } from 'react-icons-kit/feather/eye';
+// import { eyeOff } from 'react-icons-kit/feather/eyeOff';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomDatePicker from '../DatePicker/CustomDatePicker';
 
 interface FormInputProps {
     placeHolder: string;
+    onChangeText: (text: string) => void;
 }
 
-function FormInput({ placeHolder }: FormInputProps) {
+function FormInput({ placeHolder, onChangeText }: FormInputProps) {
     return ( 
             <View>      
-              <TextInput style={styles.input} placeholder={placeHolder} placeholderTextColor="#625f5fff" />
+              <TextInput onChangeText={onChangeText} 
+              style={styles.input}
+              secureTextEntry={placeHolder === 'Password' ? true : false}
+              placeholder={placeHolder}
+              placeholderTextColor="#625f5fff"/>
             </View>
 );}
-
 
 export default function CreateAccountScreen() {
 
@@ -22,15 +28,11 @@ export default function CreateAccountScreen() {
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState<'date' | 'time'>('date');
 
-  const onChange = (event: any, selectedDate?: Date) => {
-    setShow(Platform.OS === 'ios'); // keep picker open on iOS
-    if (selectedDate) setDate(selectedDate);
-  };
-
-  const showPicker = (currentMode: 'date' | 'time') => {
-    setMode(currentMode);
-    setShow(true);
-  };
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [userName, setUserName] = useState('');
+  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
 
   return (
     <>
@@ -41,39 +43,20 @@ export default function CreateAccountScreen() {
           <Text style={styles.textHeader}>Create Frog Account</Text>
         </View>
         
-        <FormInput placeHolder={'First Name'} />
-        <FormInput placeHolder={'Last Name'} />
-
-        <View>
-          <View style={{flexDirection: 'row', alignItems: 'center', paddingLeft: 30}}>
-            <TextInput style={[styles.input, {flex: 1, marginRight: 8}]} placeholder="User Name" placeholderTextColor="#625f5fff" />
-            <Button title="Check Availability" onPress={() => {}} />
-          </View>
-        </View>
-
-        <FormInput placeHolder={'Password'} />
-        <FormInput placeHolder={'Email'} />
-   
-    <View style={styles.container}>
-      <Text style={styles.text}>Selected: {date.toLocaleString()}</Text>
-
-      <Button title="Select Date" onPress={() => showPicker('date')} />
-
-      {show && (
-        <DateTimePicker
-          value={date}
-          mode={mode}
-          display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-          onChange={onChange}
-        />
-      )}
-    </View>
-
-    <View style={{paddingTop: 20, paddingLeft: 30, paddingRight: 30}}>
-        <Button color="#009f28ff" title="Create Account" onPress={() => {}} />
-    </View>
-  
+        <FormInput onChangeText={setFirstName} placeHolder={'First Name'} />
+        <FormInput onChangeText={setLastName} placeHolder={'Last Name'} />
+        <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
         
+        <Button title="Check Availability" onPress={() => {}} />
+
+        <FormInput onChangeText={setPassword} placeHolder={'Password'} />
+        <FormInput onChangeText={setEmail} placeHolder={'Email'} />
+
+        <CustomDatePicker date={date.toDateString()} />
+        <TouchableOpacity style={styles.createAccountButton}>
+            <Text style ={styles.button}>Create Account</Text>
+         </TouchableOpacity>
+  
       </SafeAreaView>
     </>
   );
@@ -98,9 +81,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 30,
     paddingTop: 20,
+    fontFamily: 'Poppins',
   },
   input: {
-    height: 40,
+    height: 50,
     margin: 12,
     marginLeft: 30,
     marginRight: 30,
@@ -108,14 +92,24 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
     fontSize: 20,
     color: '#fff',
-    alignItems: 'flex-start',
-    borderRadius: 5,
+    fontFamily: 'Poppins',
+    borderRadius: 15,
     borderColor: '#fff',
     backgroundColor: '#3a3f45',
+    alignItems: 'center',
+    justifyContent: 'center',
+    textAlignVertical: 'center',
   },
   button: {
-    fontSize: 30,
-    textDecorationLine: 'underline',
-    color: '#fff',
+    fontSize: 20,
+    fontFamily: 'Poppins',
+    color: 'white'
   },
+  createAccountButton:{     
+    margin: 50,
+    padding: 20,
+    borderRadius: 25,
+    backgroundColor: "#0d8529c9",
+    alignItems: 'center', 
+    justifyContent: 'center',}
 });
