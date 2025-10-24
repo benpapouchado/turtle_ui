@@ -26,10 +26,9 @@ class CustomDatePicker extends React.Component<IProps, IState> {
     this.setState({dateString: moment(selectedDate).format('YYYY-MM-DD'), date: selectedDate})
   }
 
-
   render() {
     return (
-      <View style={{ flex: 1, borderRadius: 100}}> 
+      <View style={{ flex: 1, borderRadius: 100,  width: '100%' }}> 
         <TouchableOpacity style={styles.inputContainerStyle}>
             
             <DateTimePicker

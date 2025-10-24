@@ -2,25 +2,11 @@ import { Stack } from 'expo-router';
 import React, { useState } from 'react';
 // import { eye } from 'react-icons-kit/feather/eye';
 // import { eyeOff } from 'react-icons-kit/feather/eyeOff';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDatePicker from '../DatePicker/CustomDatePicker';
-
-interface FormInputProps {
-    placeHolder: string;
-    onChangeText: (text: string) => void;
-}
-
-function FormInput({ placeHolder, onChangeText }: FormInputProps) {
-    return ( 
-            <View>      
-              <TextInput onChangeText={onChangeText} 
-              style={styles.input}
-              secureTextEntry={placeHolder === 'Password' ? true : false}
-              placeholder={placeHolder}
-              placeholderTextColor="#625f5fff"/>
-            </View>
-);}
+import FormInput from '../shared';
 
 export default function CreateAccountScreen() {
 
@@ -34,6 +20,8 @@ export default function CreateAccountScreen() {
   const [password, setPassword] = useState('password');
   const [email, setEmail] = useState('');
 
+  const router = useRouter();
+
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
@@ -42,21 +30,23 @@ export default function CreateAccountScreen() {
         <View>
           <Text style={styles.textHeader}>Create Frog Account</Text>
         </View>
-        
+
         <FormInput onChangeText={setFirstName} placeHolder={'First Name'} />
         <FormInput onChangeText={setLastName} placeHolder={'Last Name'} />
         <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
-        
-        <Button title="Check Availability" onPress={() => {}} />
+
+        <Button title="Check Availability" onPress={() => { }} />
 
         <FormInput onChangeText={setPassword} placeHolder={'Password'} />
         <FormInput onChangeText={setEmail} placeHolder={'Email'} />
 
         <CustomDatePicker date={date.toDateString()} />
         <TouchableOpacity style={styles.createAccountButton}>
-            <Text style ={styles.button}>Create Account</Text>
-         </TouchableOpacity>
-  
+          <Text style={styles.button}>Create Account</Text>
+        </TouchableOpacity>
+
+        <Button title="Already have an account? Log In" onPress={() => router.navigate('/Login/login')} />
+
       </SafeAreaView>
     </>
   );
@@ -67,16 +57,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#25292e',
     justifyContent: 'flex-start',
-    
+
   },
   textHeader: {
     color: '#fff',
     fontSize: 30,
-     alignItems: 'center',
-     paddingTop: 50,
-     paddingLeft: 30,
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingLeft: 30,
   },
-  text:{
+  text: {
     color: '#fff',
     fontSize: 20,
     paddingLeft: 30,
@@ -105,11 +95,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     color: 'white'
   },
-  createAccountButton:{     
+  createAccountButton: {
     margin: 50,
     padding: 20,
     borderRadius: 25,
     backgroundColor: "#0d8529c9",
-    alignItems: 'center', 
-    justifyContent: 'center',}
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
 });
