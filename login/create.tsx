@@ -1,8 +1,7 @@
-import { Stack } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 // import { eye } from 'react-icons-kit/feather/eye';
 // import { eyeOff } from 'react-icons-kit/feather/eyeOff';
-import { useRouter } from 'expo-router';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDatePicker from '../DatePicker/CustomDatePicker';

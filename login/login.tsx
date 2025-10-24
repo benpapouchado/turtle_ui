@@ -1,6 +1,6 @@
-import { Stack } from 'expo-router';
+import { router, Stack } from 'expo-router';
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormInput from '../shared';
 
@@ -22,12 +22,11 @@ export default function LoginScreen() {
                 <TouchableOpacity style={styles.createAccountButton}>
                     <Text style={styles.button}>Login</Text>
                 </TouchableOpacity>
+
+                        <Button title="Don't have an account yet? Create one here" onPress={() => router.navigate('/Login/create')} />
             </SafeAreaView>
         </>
     );
-
-
-
 }
 
 const styles = StyleSheet.create({
@@ -49,7 +48,10 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
     },
     createAccountButton: {
-        margin: 50,
+        marginTop: 30,
+        marginLeft: 30,
+        marginRight: 30,
+        marginBottom: 20,
         padding: 20,
         borderRadius: 25,
         backgroundColor: "#0d8529c9",
