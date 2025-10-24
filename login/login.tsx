@@ -1,6 +1,6 @@
 import { router, Stack } from 'expo-router';
 import React from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormInput from '../shared';
 
@@ -12,9 +12,7 @@ export default function LoginScreen() {
             <Stack.Screen options={{ headerShown: false }} />
             <SafeAreaView style={styles.container}>
 
-                <View>
-                    <Text style={styles.textHeader}>Login to your Account</Text>
-                </View>
+                <Text style={styles.textHeader}>Login to your Account</Text>
 
                 <FormInput placeHolder={'Username'} onChangeText={() => { }} />
                 <FormInput placeHolder={'Password'} onChangeText={() => { }} />
@@ -23,7 +21,8 @@ export default function LoginScreen() {
                     <Text style={styles.button}>Login</Text>
                 </TouchableOpacity>
 
-                        <Button title="Don't have an account yet? Create one here" onPress={() => router.navigate('/Login/create')} />
+                <Button title="Don't have an account yet? Create one here"
+                    onPress={() => router.navigate('/Login/create')} />
             </SafeAreaView>
         </>
     );
