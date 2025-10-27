@@ -4,7 +4,7 @@
 UI ios app
 
 Work in progress:
-Intended to be an application for tracking workouts and general fitness. 
+Intended to be an application for creating and taking quizzes
 
 Technologies used: React-native expo, Typescript
 
