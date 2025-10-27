@@ -1,5 +1,5 @@
 import { Stack, useRouter } from 'expo-router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import { eye } from 'react-icons-kit/feather/eye';
 // import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -7,7 +7,28 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDatePicker from '../DatePicker/CustomDatePicker';
 import FormInput from '../shared';
 
+import axios from 'axios';
+
+// ************************************************
+// WORK IN PROGRESS: API INTEGRATION
+const API_URL = 'https://localhost:8080/users/username-exists/benpapouchado';
+
 export default function CreateAccountScreen() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+// ************************************************
 
   const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
@@ -34,7 +55,7 @@ export default function CreateAccountScreen() {
         <FormInput onChangeText={setLastName} placeHolder={'Last Name'} />
         <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
 
-        <Button title="Check Availability" onPress={() => { }} />
+        <Button title="Check Availability" onPress={() => {fetchData()}} />
 
         <FormInput onChangeText={setPassword} placeHolder={'Password'} />
         <FormInput onChangeText={setEmail} placeHolder={'Email'} />
