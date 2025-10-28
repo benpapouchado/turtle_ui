@@ -1,5 +1,5 @@
 import { Stack, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 // import { eye } from 'react-icons-kit/feather/eye';
 // import { eyeOff } from 'react-icons-kit/feather/eyeOff';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -7,27 +7,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDatePicker from '../DatePicker/CustomDatePicker';
 import FormInput from '../shared';
 
-import axios from 'axios';
-
 // ************************************************
 // WORK IN PROGRESS: API INTEGRATION
-const API_URL = 'https://localhost:8080/users/username-exists/benpapouchado';
+const API_URL = 'https://10.0.2.2/users/username-exists';
 
 export default function CreateAccountScreen() {
-  const [data, setData] = useState([]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(API_URL);
-      setData(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
 // ************************************************
 
   const [date, setDate] = useState(new Date());
@@ -55,7 +40,9 @@ export default function CreateAccountScreen() {
         <FormInput onChangeText={setLastName} placeHolder={'Last Name'} />
         <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
 
-        <Button title="Check Availability" onPress={() => {fetchData()}} />
+        <Button title="Check Availability" onPress={() => {
+
+        }} />
 
         <FormInput onChangeText={setPassword} placeHolder={'Password'} />
         <FormInput onChangeText={setEmail} placeHolder={'Email'} />
@@ -64,6 +51,7 @@ export default function CreateAccountScreen() {
         <TouchableOpacity style={styles.createAccountButton}>
           <Text style={styles.button}>Create Account</Text>
         </TouchableOpacity>
+        <Button title="Check API" onPress={() => router.navigate('/Home/homescreen')} />
 
         <Button title="Already have an account? Log In" onPress={() => router.navigate('/Login/login')} />
 
