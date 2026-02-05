@@ -1,57 +1,93 @@
 import { Stack, useRouter } from 'expo-router';
-import React, { useState } from 'react';
-// import { eye } from 'react-icons-kit/feather/eye';
-// import { eyeOff } from 'react-icons-kit/feather/eyeOff';
-import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Animated, Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomDatePicker from '../DatePicker/CustomDatePicker';
 import FormInput from '../shared';
 
-// ************************************************
-// WORK IN PROGRESS: API INTEGRATION
-const API_URL = 'https://10.0.2.2/users/username-exists';
+const API_URL = 'http://192.168.68.105:8080/users/username-exists';
 
 export default function CreateAccountScreen() {
 
-// ************************************************
-
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
-  const [mode, setMode] = useState<'date' | 'time'>('date');
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [userName, setUserName] = useState('');
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+
   const [password, setPassword] = useState('password');
   const [email, setEmail] = useState('');
 
   const router = useRouter();
+
+  const endpoint = `${API_URL}/${userName}`;
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    if (usernameAvailable !== null) {
+      fadeAnim.setValue(0);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 350,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [usernameAvailable]);
+
+  const checkUsername = async () => {
+    try {
+      const response = await fetch(`${API_URL}/${userName}`);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setUsernameAvailable(!json.taken);
+
+    } catch (error) {
+      console.error('Fetch error:', error);
+    }
+  };
 
   return (
     <>
       <Stack.Screen options={{ headerShown: false }} />
       <SafeAreaView style={styles.container}>
 
-        <View>
-          <Text style={styles.textHeader}>Create Frog Account</Text>
-        </View>
+        <Text style={styles.textHeader}>Create Frog Account</Text>
 
         <FormInput onChangeText={setFirstName} placeHolder={'First Name'} />
         <FormInput onChangeText={setLastName} placeHolder={'Last Name'} />
-        <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
 
-        <Button title="Check Availability" onPress={() => {
+        {/* Username input + fade-in message */}
+        <View style={{ width: '100%'}}>
+          <FormInput onChangeText={setUserName} placeHolder={'User Name'} />
 
-        }} />
+          {usernameAvailable !== null && (
+            <Animated.View style={{ opacity: fadeAnim }}>
+              {usernameAvailable === true && (
+                <Text style={styles.usernameAvailableText}>🟢 Username is available</Text>
+              )}
+
+              {usernameAvailable === false && (
+                <Text style={styles.usernameTakenText}>🔴 Username is already taken</Text>
+              )}
+            </Animated.View>
+          )}
+        </View>
+
+        <Button title="Check Availability" onPress={checkUsername} />
 
         <FormInput onChangeText={setPassword} placeHolder={'Password'} />
         <FormInput onChangeText={setEmail} placeHolder={'Email'} />
 
         <CustomDatePicker date={date.toDateString()} />
+
         <TouchableOpacity style={styles.createAccountButton}>
           <Text style={styles.button}>Create Account</Text>
         </TouchableOpacity>
-        <Button title="Check API" onPress={() => router.navigate('/Home/homescreen')} />
 
         <Button title="Already have an account? Log In" onPress={() => router.navigate('/Login/login')} />
 
@@ -65,42 +101,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#25292e',
     justifyContent: 'flex-start',
-
   },
   textHeader: {
     color: '#fff',
     fontSize: 30,
-    alignItems: 'center',
     paddingTop: 50,
     paddingLeft: 30,
   },
-  text: {
-    color: '#fff',
-    fontSize: 20,
-    paddingLeft: 30,
-    paddingTop: 20,
-    fontFamily: 'Poppins',
-  },
-  input: {
-    height: 50,
-    margin: 12,
-    marginLeft: 30,
-    marginRight: 30,
-    borderWidth: 1,
-    paddingLeft: 20,
-    fontSize: 20,
-    color: '#fff',
-    fontFamily: 'Poppins',
-    borderRadius: 15,
-    borderColor: '#fff',
-    backgroundColor: '#3a3f45',
-    alignItems: 'center',
-    justifyContent: 'center',
-    textAlignVertical: 'center',
-  },
   button: {
     fontSize: 20,
-    fontFamily: 'Poppins',
     color: 'white'
   },
   createAccountButton: {
@@ -110,5 +119,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#0d8529c9",
     alignItems: 'center',
     justifyContent: 'center',
-  }
+  },
+
+  usernameAvailableText: {
+    color: '#91f470ff',
+    marginTop: 6,
+    fontSize: 16,
+    textAlign: 'center',
+  },
+
+  usernameTakenText: {
+    color: '#ce6161ff',
+    marginTop: 6,
+    fontSize: 16,
+    textAlign: 'center',
+  },
 });
